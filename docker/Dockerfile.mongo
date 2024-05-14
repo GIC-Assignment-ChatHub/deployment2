@@ -1,0 +1,14 @@
+FROM alpine:3.9
+
+# Install MongoDB
+RUN apk add --no-cache mongodb
+
+RUN mkdir -p /data/db && \
+    chown -R mongodb /data/db
+
+# Create a volume for MongoDB data
+VOLUME /data/db
+
+# Expose port 27017 from the container to the host
+EXPOSE 27017
+EXPOSE 28017

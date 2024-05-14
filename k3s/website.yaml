@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: website
+  namespace: gic-chathub
+spec:
+  selector:
+    matchLabels:
+      app: website
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: website
+    spec:
+      containers:
+        - name: website
+          image: registry.deti/gic-chathub/website:latest
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - name: website-volume
+              mountPath: /usr/share/nginx/html
+      volumes:
+        - name: website-volume
+          persistentVolumeClaim:
+            claimName: static-pvc
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: static-pvc
+  namespace: gic-chathub
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: longhorn
+  resources:
+    requests:
+      storage: 10Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: website-service
+  namespace: gic-chathub
+spec:
+  ports:
+    - port: 80
+      protocol: TCP
+  selector:
+    app: website

@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: minio
+  namespace: gic-chathub
+  labels:
+    app: minio
+spec:
+  serviceName: minio
+  replicas: 2
+  selector:
+    matchLabels:
+      app: minio
+  template:
+    metadata:
+      labels:
+        app: minio
+    spec:
+      containers:
+      - name: minio
+        env:
+        - name: MINIO_ROOT_USER
+          valueFrom:
+            secretKeyRef:
+              name: minio-secret
+              key: user
+        - name: MINIO_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: minio-secret
+              key: password
+        image: registry.deti/gic-chathub/minio:latest
+        command:
+          - ../../minio
+          - server
+          - http://minio-0.minio.gic-chathub.svc.cluster.local/data/tailchat/storage
+          - http://minio-1.minio.gic-chathub.svc.cluster.local/data/tailchat/storage
+          - '--console-address'
+          - ':9001'
+        ports:
+        - containerPort: 9000
+          hostPort: 9000
+        - containerPort: 9001
+        volumeMounts:
+        - name: minio-data
+          mountPath: /data/tailchat/storage
+  volumeClaimTemplates:
+  - metadata:
+      name: minio-data
+    spec:
+      accessModes:
+        - ReadWriteOnce
+      storageClassName: longhorn
+      resources:
+        requests:
+          storage: 500Mi

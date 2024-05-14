@@ -1,0 +1,13 @@
+FROM alpine:3.12
+
+# Install MinIO server
+RUN wget https://dl.min.io/server/minio/release/linux-amd64/minio -O minio
+    
+RUN chmod +x minio
+
+# Expose MinIO server port and MinIO console
+EXPOSE 9000
+EXPOSE 9001
+
+# Set the working directory
+WORKDIR /data/storage
