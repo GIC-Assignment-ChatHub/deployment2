@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rsyslog
+  namespace: gic-chathub
+spec:
+  selector:
+    matchLabels:
+      app: rsyslog
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: rsyslog
+    spec:
+      containers:
+        - name: rsyslog
+          image: registry.deti/gic-chathub/rsyslog:latest
+          ports:
+            - containerPort: 514
+              protocol: UDP
+          resources:
+            requests:
+              cpu: 250m
+              memory: 512Mi
+            limits:
+              cpu: 500m
+              memory: 1Gi
+          volumeMounts:
+            - name: rsyslog-volume
+              mountPath: "/var/log"
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      volumes:
+        - name: rsyslog-volume
+          persistentVolumeClaim:
+            claimName: rsyslog-pvc
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: rsyslog-pvc
+  namespace: gic-chathub
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: longhorn
+  resources:
+    requests:
+      storage: 100Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rsyslog-service
+  namespace: gic-chathub
+spec:
+  ports:
+    - port: 514
+      targetPort: 514
+      protocol: UDP
+  type: NodePort
+  selector:
+    app: rsyslog

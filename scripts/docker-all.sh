@@ -10,6 +10,11 @@ if [ -z "$REGISTRY" ]; then
     exit 1
 fi
 
+echo "--- Rsyslog: building image"
+docker build -t $REGISTRY/rsyslog:latest -f $DOCKER/Dockerfile.rsyslog .
+echo "--- Rsyslog: pushing to registry"
+docker push $REGISTRY/rsyslog:latest
+
 echo "--- Website: building image"
 docker build -t $REGISTRY/website:latest -f $DOCKER/Dockerfile.website .
 echo "--- Website: pushing to registry"

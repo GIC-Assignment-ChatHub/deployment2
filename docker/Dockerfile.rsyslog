@@ -1,0 +1,18 @@
+FROM alpine:3.19
+
+# Install rsyslog
+RUN apk add rsyslog
+
+# Configure rsyslog
+# - Enable UDP and TCP input
+# - Store logs from remote sources in /var/log/remote
+# - Consider only logs from the "gic-chathub" namespace
+RUN echo '$ModLoad imudp' > /etc/rsyslog.conf && \
+    echo '$UDPServerRun 514' >> /etc/rsyslog.conf && \
+    echo '$ModLoad imtcp' >> /etc/rsyslog.conf && \
+    echo '$InputTCPServerRun 514' >> /etc/rsyslog.conf && \
+    echo '$template KubernetesLogs,"/var/log/remote/kubernetes/%msg:R,ERE,1,BLANK:\"namespace_name\"=>\"([a-zA-z0-9_-]+)\",--end:secpath-replace%_%msg:R,ERE,1,BLANK:\"container_name\"=>\"([a-zA-z0-9_-]+)\",--end:secpath-replace%.log"' >> /etc/rsyslog.conf && \
+    echo ':msg, contains, "\"namespace_name\"=>\"gic-chathub\"" ?KubernetesLogs' >> /etc/rsyslog.conf
+
+# Start rsyslog
+ENTRYPOINT ["rsyslogd", "-n"]

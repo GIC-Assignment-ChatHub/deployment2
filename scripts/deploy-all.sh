@@ -4,6 +4,12 @@ echo "--- Deploying namespace"
 echo "--- Deploying ingress"
 ./ingress.sh
 
+echo "--- Deploying Rsyslog"
+./rsyslog.sh
+
+echo "--- Deploying Fluentd"
+./fluentd.sh
+
 echo "--- Deploying website"
 ./website.sh
 
