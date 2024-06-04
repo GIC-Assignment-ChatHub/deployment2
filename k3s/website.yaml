@@ -21,10 +21,20 @@ spec:
           volumeMounts:
             - name: website-volume
               mountPath: /usr/share/nginx/html
+            - name: website-conf
+              mountPath: /etc/nginx/nginx.conf
+              subPath: nginx.conf
+              readOnly: true
       volumes:
         - name: website-volume
           persistentVolumeClaim:
             claimName: static-pvc
+        - name: website-conf
+          configMap:
+            name: website-conf
+            items:
+              - key: nginx.conf
+                path: nginx.conf
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -50,3 +60,30 @@ spec:
       protocol: TCP
   selector:
     app: website
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: website-conf
+  namespace: gic-chathub
+data:
+  nginx.conf: |
+    user  nginx;
+    worker_processes  1;
+    error_log  /var/log/nginx/error.log warn;
+    pid        /var/run/nginx.pid;
+    events {
+            worker_connections  1024;
+    }
+    http {
+        include       /etc/nginx/mime.types;
+        default_type  application/octet-stream;
+        sendfile        on;
+        server {
+            listen 80 default_server;
+            server_name website.gic-chathub.k3s;
+            location / {
+                root  /usr/share/nginx/html;
+             }
+        }
+    }
