@@ -24,6 +24,6 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: tailchat
+                name: nginx
                 port:
-                  number: 11000       
+                  number: 80       

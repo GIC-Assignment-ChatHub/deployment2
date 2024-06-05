@@ -85,3 +85,52 @@ spec:
     - protocol: TCP
       port: 11000
       targetPort: 11000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx
+  namespace: gic-chathub
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+        - image: registry.deti/gic-chathub/nginx:latest
+          name: nginx
+          ports:
+            - containerPort: 80
+          resources: {}
+      restartPolicy: Always
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - topologyKey: "kubernetes.io/hostname"
+            labelSelector:
+              matchLabels:
+                app: nginx
+        podAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - topologyKey: "kubernetes.io/hostname"
+            labelSelector:
+              matchLabels:
+                app: tailchat
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx
+  namespace: gic-chathub
+spec:
+  ports:
+  - port: 80
+    targetPort: 80
+  selector:
+    app: nginx

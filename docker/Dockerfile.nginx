@@ -1,0 +1,14 @@
+FROM alpine:3.19
+
+# Install NGINX
+RUN apk update && \
+    apk add nginx
+
+# Expose port 80 for HTTP
+EXPOSE 80
+
+# Copy the NGINX configuration file
+COPY nginx.conf /etc/nginx/nginx.conf
+
+# Run NGINX in the foreground
+CMD ["nginx", "-g", "daemon off;"]

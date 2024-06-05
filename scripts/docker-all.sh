@@ -15,6 +15,11 @@ docker build -t $REGISTRY/rsyslog:latest -f $DOCKER/Dockerfile.rsyslog .
 echo "--- Rsyslog: pushing to registry"
 docker push $REGISTRY/rsyslog:latest
 
+echo "--- Nginx: building image"
+docker build -t $REGISTRY/nginx:latest -f $DOCKER/Dockerfile.nginx .
+echo "--- Nginx: pushing to registry"
+docker push $REGISTRY/nginx:latest
+
 echo "--- Website: building image"
 docker build -t $REGISTRY/website:latest -f $DOCKER/Dockerfile.website .
 echo "--- Website: pushing to registry"
