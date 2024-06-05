@@ -5,7 +5,7 @@ metadata:
   namespace: gic-chathub
 spec:
   serviceName: mongo
-  replicas: 2
+  replicas: 3
   selector:
     matchLabels:
       app: mongo
@@ -27,6 +27,19 @@ spec:
         volumeMounts:
         - name: mongo-persistent-storage
           mountPath: /data/tailchat/db
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - topologyKey: "kubernetes.io/hostname"
+            labelSelector:
+              matchLabels:
+                app: mongo
+        podAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - topologyKey: "kubernetes.io/hostname"
+            labelSelector:
+              matchLabels:
+                app: minio
   volumeClaimTemplates:
   - metadata:
       name: mongo-persistent-storage

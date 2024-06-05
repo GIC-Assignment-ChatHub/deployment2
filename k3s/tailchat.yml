@@ -25,7 +25,7 @@ spec:
           - name: REDIS_URL
             value: redis://:admin@redis-0.redis.gic-chathub.svc.cluster.local:6379
           - name: MONGO_URL
-            value: mongodb://mongodb-replica-0.mongo:27017/tailchat
+            value: mongodb://mongo/tailchat
           - name: MINIO_URL
             value: minio-service:9000
           - name: MINIO_USER
@@ -58,6 +58,19 @@ spec:
             cpu: 500m
             memory: 256Mi
       restartPolicy: Always
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - topologyKey: "kubernetes.io/hostname"
+            labelSelector:
+              matchLabels:
+                app: tailchat
+        podAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - topologyKey: "kubernetes.io/hostname"
+            labelSelector:
+              matchLabels:
+                app: minio
 ---
 apiVersion: v1
 kind: Service

@@ -7,7 +7,7 @@ metadata:
     app: minio
 spec:
   serviceName: minio
-  replicas: 2
+  replicas: 3
   selector:
     matchLabels:
       app: minio
@@ -35,6 +35,7 @@ spec:
           - server
           - http://minio-0.minio.gic-chathub.svc.cluster.local/data/tailchat/storage
           - http://minio-1.minio.gic-chathub.svc.cluster.local/data/tailchat/storage
+          - http://minio-2.minio.gic-chathub.svc.cluster.local/data/tailchat/storage
           - '--console-address'
           - ':9001'
         ports:
@@ -44,6 +45,13 @@ spec:
         volumeMounts:
         - name: minio-data
           mountPath: /data/tailchat/storage
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - topologyKey: "kubernetes.io/hostname"
+            labelSelector:
+              matchLabels:
+                app: minio
   volumeClaimTemplates:
   - metadata:
       name: minio-data
