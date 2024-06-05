@@ -24,8 +24,8 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: tailchat
-                  number: 11000
+                name: nginx
+                  number: 80
     - host: prometheus.gic-chathub.k3s
       http:
         paths:
