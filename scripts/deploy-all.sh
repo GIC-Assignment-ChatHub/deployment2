@@ -16,6 +16,9 @@ echo "--- Deploying Prometheus"
 echo "--- Deploying OpenTelemetry"
 ./otel.sh
 
+echo "--- Deploying Grafana"
+./grafana.sh
+
 echo "--- Deploying website"
 ./website.sh
 
