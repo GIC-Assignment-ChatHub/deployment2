@@ -10,6 +10,15 @@ echo "--- Deploying Rsyslog"
 echo "--- Deploying Fluentd"
 ./fluentd.sh
 
+echo "--- Deploying Prometheus"
+./prometheus.sh
+
+echo "--- Deploying OpenTelemetry"
+./otel.sh
+
+echo "--- Deploying Grafana"
+./grafana.sh
+
 echo "--- Deploying website"
 ./website.sh
 

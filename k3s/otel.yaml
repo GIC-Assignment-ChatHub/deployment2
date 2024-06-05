@@ -1,0 +1,39 @@
+mode: daemonset
+
+image:
+  repository: otel/opentelemetry-collector-contrib
+
+presets:
+  hostMetrics:
+    enabled: true
+  kubeletMetrics:
+    enabled: true
+  kubernetesAttributes:
+    enabled: true
+  kubernetesEvents:
+    enabled: true 
+
+config:
+  receivers:
+    hostmetrics:
+      collection_interval: 10s
+      scrappers:
+        cpu:
+        load:
+        memory:
+        disk:
+        filesystem:
+        network:
+        paging:
+        processes:
+        machine:
+
+  exporters:
+    prometheusremotewrite:
+      endpoint: http://prometheus.gic-chathub.svc:9090/api/v1/write
+
+  service:
+    pipelines:
+      metrics:
+        receivers: [hostmetrics]
+        exporters: [prometheusremotewrite]
