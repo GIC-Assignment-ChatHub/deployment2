@@ -37,7 +37,7 @@ spec:
             done
             echo "Creating Sentinel configuration file"
             echo "port 5000
-            sentinel monitor mymaster mymaster 6379 2
+            sentinel monitor mymaster redis-0.redis 6379 2
             sentinel resolve-hostnames yes
             sentinel announce-hostnames yes
             sentinel down-after-milliseconds mymaster 5000
