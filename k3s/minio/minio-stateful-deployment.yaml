@@ -61,6 +61,7 @@ spec:
           timeoutSeconds: 5
           successThreshold: 1
           failureThreshold: 3
+        restartPolicy: Always
         volumeMounts:
         - name: minio-data
           mountPath: /data/tailchat/storage
