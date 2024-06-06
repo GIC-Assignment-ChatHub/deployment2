@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: tailchat
-        image: moonrailgun/tailchat # TODO: replace with ours once problem with building is fixed
+        image: moonrailgun/tailchat
         env:
           - name: SERVICEDIR
             value: services,plugins
