@@ -36,6 +36,10 @@
    rs.add("mongodb-replica-1.mongo:27017")
    ```
    
+7. Add the third MongoDB instance.
    
+   ```shell
+   rs.add("mongodb-replica-2.mongo:27017")
+   ```   
 
 
