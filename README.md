@@ -1,8 +1,8 @@
-# GIC Deployment 1 - ChatHub
+# GIC Deployment 2 - ChatHub
 
 ## Description
 
-This repository contains the first deployment of ChatHub. It uses Docker and K3s to deploy the application services.
+This repository contains the second deployment of ChatHub. It uses Docker and K3s to deploy the application services.
 
 **Course:** Management of Computation Infrastructures (2023/2024).
 
@@ -18,12 +18,13 @@ This repository contains the first deployment of ChatHub. It uses Docker and K3s
         - It is called inside the scripts, there is no need to run it beforehand.
     - The `docker-all.sh` script will build and push all Docker images.
     - The `deploy-all.sh` script will deploy all services in Kubernetes.
-        - Note: you can run each deployment script individually if needed (ingress, minio, mongo, namespace, redis, storage, tailchat, website).
+        - Note: you can run each deployment script individually if needed (fluentd, grafana, ingress, minio, mongo, namespace, otel, prometheus, redis, rsyslog, tailchat, website).
     - The `website-content.sh` script will copy the website content, given the website pod ID as an argument.
     - The `mongo-config.md` contains the instructions to configure MongoDB in the deployment.
 - `config`: configuration to access cluster in OpenLens.
-- `hosts`: information you need to add in your `/etc/hosts` file, to be able to access the services.
-- `report.pdf`: report regarding this first deployment, [click here](report.pdf) to check it out.
+- `grafana-dashboard.json`: visualization dashboard for Grafana to monitor performance metrics.
+- `hosts`: information you need to add in your `/etc/hosts` file, to be able to access the services (website, tailchat, prometheus, grafana)
+- `report.pdf`: report regarding this second deployment, [click here](report.pdf) to check it out.
 - `Vagrantfile`: configuration of the Vagrant VM.
 
 ## Authors
