@@ -23,7 +23,29 @@ spec:
         command: ["/bin/sh"]
         args: ["-c", "mongod --replSet=rs0 --bind_ip_all"]
         ports:
-          - containerPort: 27017
+        - containerPort: 27017
+        livenessProbe:
+          exec:
+            command:
+            - mongo
+            - --eval
+            - db.adminCommand('ping')
+          initialDelaySeconds: 15
+          periodSeconds: 5
+          timeoutSeconds: 5
+          successThreshold: 1
+          failureThreshold: 2
+        readinessProbe:
+          exec:
+            command:
+            - mongo
+            - --eval
+            - db.adminCommand('ping')
+          initialDelaySeconds: 15
+          periodSeconds: 5
+          timeoutSeconds: 5
+          successThreshold: 1
+          failureThreshold: 2
         volumeMounts:
         - name: mongo-persistent-storage
           mountPath: /data/tailchat/db
