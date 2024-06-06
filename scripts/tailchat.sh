@@ -10,4 +10,5 @@ if [ -z "$NAMESPACE" ]; then
     exit 1
 fi
 
-kubectl apply -f $K3S/tailchat.yml -n $NAMESPACE
+kubectl apply -f $K3S/tailchat/tailchat.yml -n $NAMESPACE
+kubectl apply -f $K3S/tailchat/tailchat-hpa.yml -n $NAMESPACE
