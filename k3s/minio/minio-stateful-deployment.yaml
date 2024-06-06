@@ -39,9 +39,28 @@ spec:
           - '--console-address'
           - ':9001'
         ports:
-        - containerPort: 9000
-          hostPort: 9000
-        - containerPort: 9001
+          - containerPort: 9000
+          - containerPort: 9001
+        livenessProbe:
+          httpGet:
+            path: /minio/health/live
+            port: 9000
+            scheme: HTTP
+          initialDelaySeconds: 120
+          periodSeconds: 30
+          timeoutSeconds: 10
+          successThreshold: 1
+          failureThreshold: 3
+        livenessProbe:
+          httpGet:
+            path: /minio/health/ready
+            port: 9000
+            scheme: HTTP
+          initialDelaySeconds: 120
+          periodSeconds: 30
+          timeoutSeconds: 10
+          successThreshold: 1
+          failureThreshold: 3
         volumeMounts:
         - name: minio-data
           mountPath: /data/tailchat/storage
